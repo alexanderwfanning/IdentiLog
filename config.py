@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 from pathlib import Path
 dotenv_path = Path('./.env')
+
 class Config:
     def __init__(self):
         if os.path.exists(dotenv_path):
@@ -9,6 +10,8 @@ class Config:
             self.user_db: str = os.getenv('USER_DB')
             self.require_commit = os.getenv('REQUIRE_COMMIT')
             self.db_key = os.getenv('DB_KEY')
+            self.admin_username = os.getenv('ADMIN_USERNAME')
+            self.admin_password = os.getenv('ADMIN_PASSWORD')
             if not self.db_key:
                 raise ValueError("'DB_KEY' is not properly set in .env!")
             if not self.require_commit:
