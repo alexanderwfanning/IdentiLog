@@ -1,18 +1,30 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <title>IdentiLog</title>
-        <link rel="stylesheet" link="style.css">
+<head>
+    <title>IdentiLog</title>
+        <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" />
     </head>
 
     <body>
-        <h1>Fake Login Page</h1>
-        <input type="text" name="login_pass" placeholder="Username">
-        <br>
-        <br>
-        <input type="password" name="password" placeholder="Password">
-        <br>
-        <br>
-        <input type="submit" value="Login">
-    </body>
+    <div class="login-container">
+        <h1>IdentiLog</h1>
+        <p class="subtitle">Sign in to your account</p>
+        
+        <form action="/login" method="POST">
+            <div class="input-group">
+                <label for="username-input">Username</label>
+                <input type="text" id="username-input" name="login_pass" placeholder="Enter your username" required>
+            </div>
 
+            <div class="input-group">
+                <label for="password-input">Password</label>
+                <input type="password" id="password-input" name="password" placeholder="Enter your password" required>
+            </div>
+            
+            <input type="submit" value="Login">
+        </form>
+
+        <p class="footer-text">This does not actually work yet :)</p>
+    </div>
+</body>
 </html>
