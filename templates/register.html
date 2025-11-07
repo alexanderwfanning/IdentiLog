@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IdentiLog - Sign Up</title>
+        <link href="{{ url_for('static', filename='register.css') }}" rel="stylesheet" />
+    </head>
+
+    <body>
+    <div class="login-container">
+        <h1>Sign Up</h1>
+        <p class="subtitle">{{ register_message }}</p>
+        <form action="/register" method="POST">
+            <div class="input-group">
+                <label for="username-input">Username</label>
+                <input type="text" id="username-input" name="username" placeholder="Enter your username" required>
+            </div>
+            <div class="input-group">
+                <label for="password-input">Password<span class="info-icon" title="Criteria:
+    - Minimum 8 characters in length
+    - At least one uppercase letter
+    - At least one lowercase letter
+    - At least one digit
+    - At least one special character (e.g., !@#$%^&*-)">(?)</span></label>
+                <input type="password" id="password-input" name="password" placeholder="Enter your password" required>
+            </div>
+            <div class="input-group">
+                <label for="confirm_password-input">Confirm Password<span class="info-icon" title="Criteria:
+    - Minimum 8 characters in length
+    - At least one uppercase letter
+    - At least one lowercase letter
+    - At least one digit
+    - At least one special character (e.g., !@#$%^&*-)">(?)</span></label>
+                <input type="password" id="password-input" name="confirm_password" placeholder="Confirm your password" required>
+            </div>
+            <div class="input-group">
+                <label for="email-input">Email</label>
+                <input type="text" id="email" name="email" placeholder="Enter your email" required>
+            </div>
+            <div class="input-group">
+                <label for="firstname-input">First Name</label>
+                <input type="text" id="firstname-input" name="firstname" placeholder="Enter your first name" required>
+            </div>
+            <div class="input-group">
+                <label for="lastname">Last Name</label>
+                <input type="text" id="username-input" name="lastname" placeholder="Enter your last name" required>
+            </div>
+            <div class="input-group">
+                <label for="organization_key-input">Organization Key <span class="info-icon" title="Please enter the new-user password supplied by your administrator">(?)</span></label>
+                <input type="text" id="username-input" name="organization_key" placeholder="Enter your organization key" required>
+            </div>
+            <input type="submit" value="Register">
+        </form>
+    </div>
+</body>
+</html>

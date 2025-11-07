@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>IdentiLog</title>
+    <title>IdentiLog - Sign In</title>
         <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" />
     </head>
 
     <body>
     <div class="login-container">
         <h1>IdentiLog</h1>
-        <p class="subtitle">Sign in to your account</p>
+        <p class="subtitle">{{ login_message }}</p>
         
         <form action="/login" method="POST">
             <div class="input-group">
                 <label for="username-input">Username</label>
-                <input type="text" id="username-input" name="login_pass" placeholder="Enter your username" required>
+                <input type="text" id="username-input" name="username" placeholder="Enter your username" required>
             </div>
 
             <div class="input-group">
@@ -22,9 +22,10 @@
             </div>
             
             <input type="submit" value="Login">
+            <label for="remember_me"><input type="checkbox" name="remember_me" value="True">  Stay signed in  </label>
         </form>
-
-        <p class="footer-text">This does not actually work yet :)</p>
+        <a class="register-text" href="/register" method="GET">New User</a>
+        <p class="footer-text">{{ organization_text }}</p>
     </div>
 </body>
 </html>
