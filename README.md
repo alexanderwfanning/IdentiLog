@@ -51,5 +51,6 @@ ORGANIZATION_FOOTER_TEXT='ORGANIZATION TEXT (Update in .env file)'
 ```
 
 # How to run:
-
-It is all brought online with the "flask --app pages run" command.
+```
+pip install -r requirements.txt
+flask --app pages run (optional --debug flag)
