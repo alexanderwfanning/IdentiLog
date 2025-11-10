@@ -52,6 +52,9 @@ ORGANIZATION_FOOTER_TEXT='ORGANIZATION TEXT (Update in .env file)'
 
 # How to run:
 ```
+sudo apt-get update
+python3 -m pip install --upgrade pip
 sudo apt-get install -y libsqlcipher-dev
 pip install -r requirements.txt
 flask --app pages run (optional --debug flag)
+```
