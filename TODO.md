@@ -22,4 +22,7 @@
     - [x] Jinja2 templates for invalid login/registration attempts?
     - [x] Automatically output *system* logs to files
     - [ ] Automatically output *user* logs to separate file (XML OR JSON? so that we can make it pretty for a dashboard viewer)
-    - [ ] Lock attempts (environment variable)
+    - [ ] Automatically lowercase username & emails when inserting and selecting from db
+    - [ ] Add a run.py that will handle setup
+        - [ ] Ask user for admin username/password instead of setting it up in .env
+        - [ ] Other stuff

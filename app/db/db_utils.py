@@ -15,25 +15,31 @@ except Exception as e:
     exit()
 
 def new_user(username: str, password: str,confirm_password: str, first_name: str, last_name: str, email: str, organization_key: str) -> bool:
+    info = []
+    for field in [username, first_name, last_name, email]:
+        field = field.strip(" ")
+        field = field.lower()
+        info.append(field)
+
     if organization_key == Config.organization_key:
         if password == confirm_password:
-            select_name = cursor.execute("SELECT username from users where lower(username) = lower(?)", (username,))
+            select_name = cursor.execute("SELECT username from users where username = ?", (info[0],))
             existing_user = select_name.fetchall()
             if existing_user:
                 return False, "Invalid username"
             else:
-                select_email = cursor.execute("SELECT email FROM users WHERE email = ?", (email,))
+                select_email = cursor.execute("SELECT email FROM users WHERE email = ?", (info[3],))
                 existing_email = select_email.fetchall()
                 if existing_email:
                     return False, "Email already registered"
                 else:
-                    valid_fields, field = validate_fields(username, password, first_name, last_name, email)
+                    valid_fields, field = validate_fields(info[0], password, info[1], info[2], info[3])
 
                     # Where user is finally created:
                     if valid_fields:
-                        logging.info(f"Creating new user '{username}...'")
+                        logging.info(f"Creating new user '{username.lower()}...'")
                         pass_hash = generate_password_hash(password, method='scrypt', salt_length=16)
-                        cursor.execute(f"INSERT INTO users (username, pass_hash, first_name, last_name, email) VALUES (?, ?, ?, ?, ?)", (username,pass_hash,first_name,last_name,email,))
+                        cursor.execute(f"INSERT INTO users (username, pass_hash, first_name, last_name, email) VALUES (?, ?, ?, ?, ?)", (username.lower(),pass_hash,first_name.lower(),last_name.lower(),email.lower(),))
                         return True, "Successfully Registered - Please sign in"
                     else:
                         return False, field
@@ -45,18 +51,13 @@ def new_user(username: str, password: str,confirm_password: str, first_name: str
         return False, "Invalid organization key"
 
 def verify_user(username: str, password: str) -> tuple[bool, str]:
-        cursor.execute('SELECT pass_hash from users where lower(username) = lower(?)', (username,))
-        selection = cursor.fetchone()
-        if selection:
-            selected_hash = selection[0] # SQLite returns a tuple, we grab the first element of the tuple so that we use it as a string in check_password_hash()
+            
             auth = check_password_hash(selected_hash, password)
             if auth:
                print('\033[92m' + f'User {username} successfully authenticated!' + '\033[0m')
                return True, ""
             else:
-               return False, "Invalid password"
-        else:
-           return False, "Invalid username"
+               return False, "Invalid credentials"
 
 def connect():
     if os.path.exists('./'+ Config.user_db):
