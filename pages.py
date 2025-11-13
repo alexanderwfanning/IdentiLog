@@ -1,11 +1,12 @@
 from flask import Flask, render_template, request, session, redirect, url_for
-from data import verify_user, connect, new_user
+from app.db import verify_user, new_user, connect
 from config import Config
 app = Flask(__name__)
 key = Config()
 app.secret_key = key.flask_key
 organization_text = key.organization_text
 @app.before_request
+
 def load_db():
         connect()
 
