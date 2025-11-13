@@ -51,6 +51,11 @@ ORGANIZATION_FOOTER_TEXT='ORGANIZATION TEXT (Update in .env file)'
 ```
 
 # How to set up development environment:
+## 1.
+### Copy change .env.example to .env and edit the values
+## 2.
+### Run the following commands:
+
 ```
 sudo apt-get update
 pip install --upgrade pip

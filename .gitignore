@@ -3,3 +3,4 @@ yourdbname.db
 identi.log
 .venv
 __pycache__
+.vscode
