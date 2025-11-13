@@ -51,7 +51,9 @@ def new_user(username: str, password: str,confirm_password: str, first_name: str
         return False, "Invalid organization key"
 
 def verify_user(username: str, password: str) -> tuple[bool, str]:
-            
+            cursor.execute("SELECT pass_hash FROM users WHERE username = ?", (username.lower(),))
+            pass_hash = cursor.fetchone()
+            selected_hash = pass_hash[0] if pass_hash else ""
             auth = check_password_hash(selected_hash, password)
             if auth:
                print('\033[92m' + f'User {username} successfully authenticated!' + '\033[0m')

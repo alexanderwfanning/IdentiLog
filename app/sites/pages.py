@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, session, redirect, url_for
-from app.db import verify_user, new_user, connect
+from db import verify_user, new_user, connect
 from config import Config
 app = Flask(__name__)
 key = Config()
