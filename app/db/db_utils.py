@@ -1,6 +1,6 @@
 from sqlcipher3 import dbapi2 as sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
-from config import Config
+from app.config.config import Config
 from .fields import validate_fields
 import os, logging
 new_db = bool(True)

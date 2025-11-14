@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, session, redirect, url_for
-from db import verify_user, new_user, connect
-from config import Config
+from app.db import verify_user, new_user, connect
+from app.config.config import Config
 app = Flask(__name__)
 key = Config()
 app.secret_key = key.flask_key
@@ -33,7 +33,7 @@ def register():
         print(f'{username}, {password}, {confirm_password}, {email}, {firstname}, {lastname}, {organization_key}')
         registered, status = new_user(username, password, confirm_password, firstname, lastname, email, organization_key)
         if registered:
-            return render_template("index.html", register_message=status)
+            return render_template("index.html", login_message=status)
         if not registered:
             return render_template("register.html", register_message=status)
 

@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 from pathlib import Path
-dotenv_path = Path('./.env')
+dotenv_path = Path('.env')
 class Config:
     def __init__(self):
         if os.path.exists(dotenv_path):

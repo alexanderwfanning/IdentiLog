@@ -23,6 +23,30 @@
     - [x] Automatically output *system* logs to files
     - [ ] Automatically output *user* logs to separate file (XML OR JSON? so that we can make it pretty for a dashboard viewer)
     - [ ] Automatically lowercase username & emails when inserting and selecting from db
-    - [ ] Add a run.py that will handle setup
-        - [ ] Ask user for admin username/password instead of setting it up in .env
-        - [ ] Other stuff
+    - [ ] Create dashboard page with welcome message
+    - [ ] Add logout functionality
+    - [ ] Update login to redirect to dashboard (not just render template)
+    - [ ] Add "stay logged in" checkbox functionality
+    - [ ] Test all flows work (register → login → dashboard → logout)
+    - [ ] Add services list to dashboard (hardcoded for now)
+    - [ ] Service name, URL
+    - [ ] Display as cards/grid
+    - [ ] Links open in new tab
+    - [ ] Create basic admin panel page
+    - [ ] Check if user is admin (add admin column check)
+    - [ ] Show list of all users
+    - [ ] Show user count, registration dates
+    - [ ] Add navigation between pages (dashboard ↔ admin panel
+
+3. [**Phase 3**]
+    - [ ] Admin: Add ability to delete users
+    - [ ] Admin: Add ability to toggle admin status
+    - [ ] Admin: View user details (email, registration date, last login)
+    - [ ] Add "last login" timestamp to database
+    - [ ] Update last login on successful login
+    - [ ] Fix error messages (don't leak username existence)
+    - [ ] Add rate limiting to login endpoint
+    - [ ] Add session timeout configuration
+    - [ ] Improve password requirements display on register page
+    - [ ] Add "confirm password" client-side validation (JavaScript)
+    - [ ] Add favicon
