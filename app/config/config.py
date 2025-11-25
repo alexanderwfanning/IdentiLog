@@ -13,7 +13,7 @@ class Config:
             self.admin_password = os.getenv('ADMIN_PASSWORD')
             self.flask_key = os.getenv('FLASK_SECRET_KEY')
             self.organization_key = os.getenv('NEW_USER_PASSWORD')
-            self.organization_text = os.getenv('ORGANIZATION_FOOTER_TEXT')
+            self.organization_text = os.getenv('ORGANIZATION')
             if not self.db_key:
                 raise ValueError("'DB_KEY' is not properly set in .env")
             if not self.require_commit:

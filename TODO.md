@@ -22,7 +22,7 @@
     - [x] Jinja2 templates for invalid login/registration attempts?
     - [x] Automatically output *system* logs to files
     - [ ] Automatically output *user* logs to separate file (XML OR JSON? so that we can make it pretty for a dashboard viewer)
-    - [ ] Automatically lowercase username & emails when inserting and selecting from db
+    - [x] Automatically lowercase username & emails when inserting and selecting from db
     - [ ] Create dashboard page with welcome message
     - [ ] Add logout functionality
     - [ ] Update login to redirect to dashboard (not just render template)
