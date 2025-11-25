@@ -1,21 +1,13 @@
 from flask import Flask, render_template, request, session, redirect, url_for
-from app.db import verify_user, new_user, connect
+from app.db.db_utils import verify_user, new_user, connect, get_users
 from app.config.config import Config
 app = Flask(__name__)
 key = Config()
 app.secret_key = key.flask_key
 organization_text = key.organization_text
-users = {
-    "id": 1,
-    "username": "johndoe",
-    "first_name": "John",
-    "last_name": "Doe",
-    "email": "johndoe@example.com",
-    "admin": 0
-}
 @app.before_request
 def load_db():
-        connect()
+    connect()
 
 @app.route("/")
 def index():
@@ -67,7 +59,9 @@ def dashboard():
     if request.method == 'GET':
         match 'username' in session:
             case True:
-                return render_template("dashboard.html", username=session['username'], organization=organization_text, users=[users])
+                user_dict=get_users()
+                print(user_dict)
+                return render_template("dashboard.html", username=session['username'], organization=organization_text, users=user_dict)
             case False:
                 return redirect(url_for('login'))
         

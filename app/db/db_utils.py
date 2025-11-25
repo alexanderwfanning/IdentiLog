@@ -86,10 +86,21 @@ def connect():
         if new_db:
             cursor.execute("CREATE TABLE IF NOT EXISTS users (uid INTEGER, username TEXT, pass_hash TEXT, first_name TEXT, last_name TEXT, email TEXT,admin INTEGER)")
             admin_pass_hash = generate_password_hash(Config.admin_password, method='scrypt', salt_length=16)
-            cursor.execute(f"INSERT INTO users (uid, username, pass_hash) VALUES (1, '{Config.admin_username}', '{admin_pass_hash}')")
-
+            cursor.execute(f"INSERT INTO users (uid, username, pass_hash, admin) VALUES (1, '{Config.admin_username}', '{admin_pass_hash}', 1)")
+        logging.info("Database connection established.")
     except sqlite3.DatabaseError as e:
         logging.critical(f"Critical Error!: {e}")
         if new_db:
             logging.critical(f"Destroying database '{Config.user_db}'")
             os.remove(Config.user_db)
+
+def get_users():
+    logging.info("Gather user data...")
+    cursor.execute("SELECT uid, username, first_name, last_name, email, admin FROM users")
+    users = cursor.fetchall()
+    keys = ['uid', 'username', 'first_name', 'last_name', 'email', 'admin']
+    user_dict = {}
+    for user in users:
+        uid = user[0]  
+        user_dict[uid] = dict(zip(keys, user))
+    return user_dict
