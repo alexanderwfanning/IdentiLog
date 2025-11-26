@@ -1,10 +1,16 @@
 from flask import Flask, render_template, request, session, redirect, url_for
-from app.db.db_utils import verify_user, new_user, connect, get_users, user_logging, get_log
+from app.db.db_utils import verify_user, new_user, connect, get_users, user_logging, get_log, verify_admin
 from app.config.config import Config
 app = Flask(__name__)
 key = Config()
 app.secret_key = key.flask_key
 organization_text = key.organization_text
+links = {
+        "Google": "https://google.com",
+        "GitHub": "https://github.com",
+        "Stack Overflow": "https://stackoverflow.com",
+        # Add as many as you need
+    }
 @app.before_request
 def load_db():
     connect()
@@ -60,8 +66,19 @@ def dashboard():
     if request.method == 'GET':
         match 'username' in session:
             case True:
+                is_admin = verify_admin(session['username'])
                 user_dict=get_users()
-                return render_template("dashboard.html", username=session['username'], organization=organization_text, users=user_dict)
+                return render_template("dashboard.html", username=session['username'], organization=organization_text, users=user_dict, links=links, is_admin=is_admin)
+            case False:
+                return redirect(url_for('login'))
+            
+@app.route("/admin")
+def admin():
+    if request.method == 'GET':
+        match 'username' in session:
+            case True:
+                user_dict=get_users()
+                return render_template("admin.html", username=session['username'], organization=organization_text, users=user_dict)
             case False:
                 return redirect(url_for('login'))
 
@@ -75,9 +92,13 @@ def logout():
     
 @app.route("/logs", methods=["POST"])
 def logs():
-    if request.method == "POST":
-        user = request.form['user']
-        print(user)
-        user_log = get_log(user)
-        user_logging(session['username'], f"Viewed logs for {user}")
-    return render_template('logs.html', organization=organization_text, user=user, user_log=user_log)
+    is_admin = verify_admin(session['username'])
+    if is_admin:
+        if request.method == "POST":
+            user = request.form['user']
+            print(user)
+            user_log = get_log(user)
+            user_logging(session['username'], f"Viewed logs for {user}")
+        return render_template('logs.html', organization=organization_text, user=user, user_log=user_log)
+    else:
+        return redirect(url_for('index'))

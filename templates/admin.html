@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IdentiLog</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" />
+    </head>
+
+    <body>
+    <div class="banner">
+    <div class="banner__content">
+    <div class="banner__text">
+    <strong>Welcome,</strong> {{username}}!
+    </div>
+    </div>
+    </div>
+    <div class="logout">
+    <form action="/logout">
+        <input type="submit" value="Logout">
+    </form>
+    </div>
+    <div class="users-container">
+        <h1 class="users_text">{{organization}} users</h1>
+        <div class="table-container">
+            <div class="line"></div></div>
+            {% if users %}
+            <table class="user-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Admin</th>
+                        <th>View Logs</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users.values() %}
+                    <tr>
+                        <td>{{ user.uid }}</td>
+                        <td>{{user.username}}</td>
+                        <td>{{ user.first_name | title }} </td>
+                        <td>{{ user.last_name | title }}</td>
+                        <td>{{ user.email}}</td>
+                        <td>{% if user.admin == 1 %}
+                            Yes
+                            {% else %}
+                            No
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="log-button">
+                                <form action="/logs" method="POST">
+                                    <input type="hidden" name="user" value="{{ user.username }}">
+                                    <input type="submit" value="Logs" id="logs">
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p class="subtitle">No users found</p>
+            {% endif %}
+        </div>
+
+    </div>
+
+</body>
+</html>

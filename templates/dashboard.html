@@ -5,6 +5,65 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" />
+        <style>
+            .panels-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                gap: 1.2rem;
+                padding: 1.5rem 0;
+                width: 90%;
+                margin: 0 auto;
+            }
+
+            .panel {
+                background: #1e1e1e;
+                border-radius: 5px;
+                padding: 1.25rem;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.35);
+                text-decoration: none;
+                color: inherit;
+                display: block;
+                border: 1px solid #3a3a3a;
+            }
+
+            .panel:hover {
+                border-color: #9e6a2b;
+            }
+
+            .panel-title {
+                font-size: 1.1rem;
+                font-weight: 600;
+                color: #F8F4E1;
+                margin-bottom: 0.5rem;
+                text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+            }
+
+            .panel-url {
+                font-size: 0.85rem;
+                color: #BBA080;
+                word-break: break-all;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+            }
+
+            @media (max-width: 768px) {
+                .panels-grid {
+                    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                    gap: 0.9rem;
+                }
+                
+                .panel-title {
+                    font-size: 1rem;
+                }
+                
+                .panel-url {
+                    font-size: 0.8rem;
+                }
+            }
+        </style>
     </head>
 
     <body>
@@ -23,51 +82,25 @@
     <div class="users-container">
         <h1 class="users_text">{{organization}} users</h1>
         <div class="table-container">
-            <div class="line"></div></div>
-            {% if users %}
-            <table class="user-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Username</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Email</th>
-                        <th>Admin</th>
-                        <th>View Logs</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for user in users.values() %}
-                    <tr>
-                        <td>{{ user.uid }}</td>
-                        <td>{{user.username}}</td>
-                        <td>{{ user.first_name | title }} </td>
-                        <td>{{ user.last_name | title }}</td>
-                        <td>{{ user.email}}</td>
-                        <td>{% if user.admin == 1 %}
-                            Yes
-                            {% else %}
-                            No
-                            {% endif %}
-                        </td>
-                        <td>
-                            <div class="log-button">
-                                <form action="/logs" method="POST">
-                                    <input type="hidden" name="user" value="{{ user.username }}">
-                                    <input type="submit" value="Logs" id="logs">
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            {% else %}
-            <p class="subtitle">No users found</p>
-            {% endif %}
+            <div class="line"></div>
+            
+            <div class="panels-grid">
+                {% if is_admin %}
+                <a href="/admin" class="panel" target="_blank" rel="noopener noreferrer">
+                    <div class="panel-title">Admin Panel</div>
+                    <div class="panel-url"></div>
+                </a>
+                {% endif %}
+                {% for name, url in links.items() %}
+                <a href="{{ url }}" class="panel" target="_blank" rel="noopener noreferrer">
+                    <div class="panel-title">{{ name }}</div>
+                    <div class="panel-url">{{ url }}</div>
+                </a>
+                {% endfor %}
+            </div>
+            
+            <div class="line"></div>
         </div>
-
     </div>
 
 </body>

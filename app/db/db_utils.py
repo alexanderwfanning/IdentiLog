@@ -125,3 +125,11 @@ def get_log(user: str) -> str:
             return log
     else:
         logging.warning(f"{user} log not found!")
+
+def verify_admin(user: str) -> bool:
+    cursor.execute("SELECT admin from users where username = ?", (user.lower(),))
+    admin = cursor.fetchall()
+    if 1 in admin[0]:
+        return True
+    else:
+        return False
