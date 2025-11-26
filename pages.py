@@ -43,8 +43,9 @@ def login():
         password = request.form['password']
         authenticated, invalid_credential = verify_user(username, password)
         if authenticated:
+            session['username'] = request.form['username']
             if 'remember_me' in request.form:
-                session['username'] = request.form['username']
+                session.permanent = True
             return render_template("login.html")
         else:
             return render_template("index.html", login_message=invalid_credential)
@@ -64,4 +65,9 @@ def dashboard():
                 return render_template("dashboard.html", username=session['username'], organization=organization_text, users=user_dict)
             case False:
                 return redirect(url_for('login'))
-        
+
+@app.route("/logout")
+def logout():
+    if request.method == 'GET':
+        session.clear()
+        return render_template("index.html")
