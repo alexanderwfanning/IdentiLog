@@ -34,6 +34,7 @@
                         <th>Last Name</th>
                         <th>Email</th>
                         <th>Admin</th>
+                        <th>View Logs</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -49,6 +50,14 @@
                             {% else %}
                             No
                             {% endif %}
+                        </td>
+                        <td>
+                            <div class="log-button">
+                                <form action="/logs" method="POST">
+                                    <input type="hidden" name="user" value="{{ user.username }}">
+                                    <input type="submit" value="Logs" id="logs">
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     {% endfor %}

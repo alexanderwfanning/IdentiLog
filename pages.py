@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, session, redirect, url_for
-from app.db.db_utils import verify_user, new_user, connect, get_users, user_logging
+from app.db.db_utils import verify_user, new_user, connect, get_users, user_logging, get_log
 from app.config.config import Config
 app = Flask(__name__)
 key = Config()
@@ -68,5 +68,16 @@ def dashboard():
 @app.route("/logout")
 def logout():
     if request.method == 'GET':
+        username=session['username']
+        user_logging(username, "Logged out")
         session.clear()
         return redirect(url_for('index'))
+    
+@app.route("/logs", methods=["POST"])
+def logs():
+    if request.method == "POST":
+        user = request.form['user']
+        print(user)
+        user_log = get_log(user)
+        user_logging(session['username'], f"Viewed logs for {user}")
+    return render_template('logs.html', organization=organization_text, user=user, user_log=user_log)

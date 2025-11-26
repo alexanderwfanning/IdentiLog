@@ -116,3 +116,12 @@ def get_users() -> dict:
         uid = user[0]  
         user_dict[uid] = dict(zip(keys, user))
     return user_dict
+
+def get_log(user: str) -> str:
+    filename = f'userlogs/{user}.log'
+    if os.path.exists(filename):
+        with open(filename, 'r') as file:
+            log = file.read()
+            return log
+    else:
+        logging.warning(f"{user} log not found!")

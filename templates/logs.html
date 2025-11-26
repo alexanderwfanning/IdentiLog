@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IdentiLog</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" />
+    </head>
+
+    <body>
+    <div class="banner">
+    <div class="banner__content">
+    <div class="banner__text">
+    <strong>{{ organization }}</strong> - Logs for {{user}}
+    </div>
+    </div>
+    </div>
+    <div class="logout">
+    <form action="/dashboard">
+        <input type="submit" value="Back">
+    </form>
+    </div>
+    <div class="users-container">
+        <textarea id="logs-container" rows="10" cols="50" readonly>{{ user_log }}</textarea>
+    </div>
+
+    </div>
+
+</body>
+</html>
