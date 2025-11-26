@@ -7,7 +7,7 @@
 
     <body>
     <div class="login-container">
-        <h1>IdentiLog</h1>
+        <h1>{{ organization }}</h1>
         <p class="subtitle">{{ login_message }}</p>
         
         <form action="/login" method="POST">
@@ -25,7 +25,7 @@
             <label for="remember_me"><input type="checkbox" name="remember_me" value="True">  Stay signed in  </label>
         </form>
         <a class="register-text" href="/register" method="GET">New User</a>
-        <p class="footer-text">{{ organization_text }}</p>
+        <p class="footer-text">Powered by IdentiLog</p>
     </div>
 </body>
 </html>

@@ -15,7 +15,7 @@ def index():
     if 'username' in session:
          return redirect("/dashboard")
     # No session cookie:
-    return render_template("index.html", organization_text=organization_text)
+    return render_template("index.html", organization=organization_text)
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -61,7 +61,6 @@ def dashboard():
         match 'username' in session:
             case True:
                 user_dict=get_users()
-                print(user_dict)
                 return render_template("dashboard.html", username=session['username'], organization=organization_text, users=user_dict)
             case False:
                 return redirect(url_for('login'))
@@ -70,4 +69,4 @@ def dashboard():
 def logout():
     if request.method == 'GET':
         session.clear()
-        return render_template("index.html")
+        return redirect(url_for('index'))
