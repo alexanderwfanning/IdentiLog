@@ -32,7 +32,7 @@ def register():
         print(f'{username}, {password}, {confirm_password}, {email}, {firstname}, {lastname}, {organization_key}')
         registered, status = new_user(username, password, confirm_password, firstname, lastname, email, organization_key)
         if registered:
-            return render_template("index.html", login_message=status)
+            return render_template("index.html", login_message=status, organization=organization_text)
         if not registered:
             return render_template("register.html", register_message=status)
 
