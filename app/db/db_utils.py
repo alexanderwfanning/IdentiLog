@@ -3,6 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app.config.config import Config
 from .fields import validate_fields
 import os, logging
+from datetime import datetime
 new_db = bool(True)
 logging.basicConfig(level=logging.INFO, format='(%(asctime)s) IdentiLog %(levelname)s: %(message)s')
 logging.info("Checking for existing database...")
@@ -13,6 +14,14 @@ try:
 except Exception as e:
     logging.critical(f'Error loading config: {e}')
     exit()
+
+def user_logging(username: str, info: str):
+    current_datetime = datetime.now()
+    filename = f'userlogs/{username}.log'
+    if not os.path.exists(filename):
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
+    with open(filename, 'a') as file:
+        file.write(f'{current_datetime} - {username} - {info}\n')
 
 def new_user(username: str, password: str,confirm_password: str, first_name: str, last_name: str, email: str, organization_key: str) -> bool:
     info = []
@@ -37,9 +46,10 @@ def new_user(username: str, password: str,confirm_password: str, first_name: str
 
                     # Where user is finally created:
                     if valid_fields:
-                        logging.info(f"Creating new user '{username.lower()}...'")
+                        logging.info(f"Creating new user '{username.lower()}'...")
                         pass_hash = generate_password_hash(password, method='scrypt', salt_length=16)
                         cursor.execute(f"INSERT INTO users (username, pass_hash, first_name, last_name, email) VALUES (?, ?, ?, ?, ?)", (username.lower(),pass_hash,first_name.lower(),last_name.lower(),email.lower(),))
+                        user_logging(username, "Successfully registered")
                         return True, "Successfully Registered - Please sign in"
                     else:
                         return False, field
@@ -57,8 +67,10 @@ def verify_user(username: str, password: str) -> tuple[bool, str]:
             auth = check_password_hash(selected_hash, password)
             if auth:
                print('\033[92m' + f'User {username} successfully authenticated!' + '\033[0m')
+               user_logging(username, "Successfully authenticated")
                return True, ""
             else:
+               user_logging(username, "Failed to authenticate")
                return False, "Invalid credentials"
 
 def connect():
@@ -70,11 +82,11 @@ def connect():
         if new_db == False:
             logging.info(f"Connecting to {Config.user_db}...")
         else:
-            logging.info(f"No database under the name '{Config.user_db}' found. Creating new database...")
+            logging.warning(f"No database under the name '{Config.user_db}' found. Creating new database...")
         conn = sqlite3.connect(Config.user_db)
 
         if Config.require_commit == 'False':
-            logging.info("Autocommit mode is ON.")
+            logging.debug("Autocommit mode is ON.")
             conn.isolation_level = None
         else:
             logging.warning("Autocommit mode is OFF. NOT RECOMMENDED. To turn it on change 'REQUIRE_COMMIT' to 'False'")

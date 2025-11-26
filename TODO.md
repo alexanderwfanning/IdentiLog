@@ -23,11 +23,11 @@
     - [x] Automatically output *system* logs to files
     - [ ] Automatically output *user* logs to separate file (XML OR JSON? so that we can make it pretty for a dashboard viewer)
     - [x] Automatically lowercase username & emails when inserting and selecting from db
-    - [ ] Create dashboard page with welcome message
-    - [ ] Add logout functionality
-    - [ ] Update login to redirect to dashboard (not just render template)
-    - [ ] Add "stay logged in" checkbox functionality
-    - [ ] Test all flows work (register → login → dashboard → logout)
+    - [x] Create dashboard page with welcome message
+    - [x] Add logout functionality
+    - [x] Update login to redirect to dashboard
+    - [x] Add "stay logged in" checkbox functionality
+    - [x] Test all flows work (register → login → dashboard → logout)
     - [ ] Add services list to dashboard (hardcoded for now)
     - [ ] Service name, URL
     - [ ] Display as cards/grid
@@ -36,7 +36,7 @@
     - [ ] Check if user is admin (add admin column check)
     - [ ] Show list of all users
     - [ ] Show user count, registration dates
-    - [ ] Add navigation between pages (dashboard ↔ admin panel
+    - [ ] Add navigation between pages (dashboard <-> admin panel)
 
 3. [**Phase 3**]
     - [ ] Admin: Add ability to delete users

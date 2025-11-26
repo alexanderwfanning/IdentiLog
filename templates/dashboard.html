@@ -41,8 +41,8 @@
                     <tr>
                         <td>{{ user.uid }}</td>
                         <td>{{user.username}}</td>
-                        <td>{{ user.first_name }} </td>
-                        <td>{{ user.last_name }}</td>
+                        <td>{{ user.first_name | title }} </td>
+                        <td>{{ user.last_name | title }}</td>
                         <td>{{ user.email}}</td>
                         <td>{% if user.admin == 1 %}
                             Yes
