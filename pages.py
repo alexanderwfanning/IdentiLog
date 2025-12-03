@@ -9,18 +9,33 @@ links = {
         "Google": "https://google.com",
         "GitHub": "https://github.com",
         "Stack Overflow": "https://stackoverflow.com",
-        # Add as many as you need
+        
     }
 @app.before_request
 def load_db():
     connect()
 
+def admin_required(f):
+    def decorated_function(*args, **kwargs):
+        is_admin = verify_admin(session['username'])
+        if not is_admin:
+            return redirect(url_for('dashboard'))
+        return f(*args, **kwargs)
+    decorated_function.__name__ = f.__name__
+    return decorated_function
+
+def login_required(f):
+    def decorated_function(*args, **kwargs):
+        if 'username' not in session:
+                return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    decorated_function.__name__ = f.__name__
+    return decorated_function
+
 @app.route("/")
 def index():
-    # Session cookie:
     if 'username' in session:
-         return redirect("/dashboard")
-    # No session cookie:
+        return redirect(url_for('dashboard'))
     return render_template("index.html", organization=organization_text)
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -59,30 +74,26 @@ def login():
         if 'username' in session:
             return render_template("login.html")
         else:
-            return render_template("index.html", login_message="You are logged out")
+            return render_template("index.html", login_message="You are logged out", organization=organization_text)
         
 @app.route("/dashboard")
+@login_required
 def dashboard():
     if request.method == 'GET':
-        match 'username' in session:
-            case True:
                 is_admin = verify_admin(session['username'])
                 user_dict=get_users()
                 return render_template("dashboard.html", username=session['username'], organization=organization_text, users=user_dict, links=links, is_admin=is_admin)
-            case False:
-                return redirect(url_for('login'))
             
 @app.route("/admin")
+@login_required
+@admin_required
 def admin():
     if request.method == 'GET':
-        match 'username' in session:
-            case True:
-                user_dict=get_users()
-                return render_template("admin.html", username=session['username'], organization=organization_text, users=user_dict)
-            case False:
-                return redirect(url_for('login'))
+        user_dict=get_users()
+        return render_template("admin.html", username=session['username'], organization=organization_text, users=user_dict)
 
 @app.route("/logout")
+@login_required
 def logout():
     if request.method == 'GET':
         username=session['username']
@@ -90,15 +101,15 @@ def logout():
         session.clear()
         return redirect(url_for('index'))
     
-@app.route("/logs", methods=["POST"])
+@app.route("/logs", methods=["POST", 'GET'])
+@login_required
+@admin_required
 def logs():
-    is_admin = verify_admin(session['username'])
-    if is_admin:
-        if request.method == "POST":
-            user = request.form['user']
-            print(user)
-            user_log = get_log(user)
-            user_logging(session['username'], f"Viewed logs for {user}")
-        return render_template('logs.html', organization=organization_text, user=user, user_log=user_log)
-    else:
-        return redirect(url_for('index'))
+    user = request.form['user']
+    print(user)
+    user_log = get_log(user)
+    user_logging(session['username'], f"Viewed logs for {user}")
+    return render_template('logs.html', organization=organization_text, user=user, user_log=user_log)
+    
+if __name__ == "__main__":
+    app.run(debug=True)
