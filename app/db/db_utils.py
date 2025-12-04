@@ -1,9 +1,10 @@
 from sqlcipher3 import dbapi2 as sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
-from app.config.config import Config
+from ..config.config import Config
+from ..config.user_logging import user_logging
 from .fields import validate_fields
 import os, logging
-from datetime import datetime
+
 new_db = bool(True)
 logging.basicConfig(level=logging.INFO, format='(%(asctime)s) IdentiLog %(levelname)s: %(message)s')
 logging.info("Checking for existing database...")
@@ -15,13 +16,6 @@ except Exception as e:
     logging.critical(f'Error loading config: {e}')
     exit()
 
-def user_logging(username: str, info: str):
-    current_datetime = datetime.now()
-    filename = f'userlogs/{username}.log'
-    if not os.path.exists(filename):
-        os.makedirs(os.path.dirname(filename), exist_ok=True)
-    with open(filename, 'a') as file:
-        file.write(f'{current_datetime} - {username} - {info}\n')
 
 def new_user(username: str, password: str,confirm_password: str, first_name: str, last_name: str, email: str, organization_key: str) -> bool:
     info = []

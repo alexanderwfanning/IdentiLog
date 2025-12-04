@@ -91,11 +91,11 @@
                     <div class="panel-url"></div>
                 </a>
                 {% endif %}
-                {% for name, url in links.items() %}
-                <a href="{{ url }}" class="panel" target="_blank" rel="noopener noreferrer">
+                {% for name, service_key in links.items() %}
+                    <a href="/{{ service_key }}" class="panel" target="_blank" rel="noopener noreferrer">
                     <div class="panel-title">{{ name }}</div>
-                    <div class="panel-url">{{ url }}</div>
-                </a>
+                    <div class="panel-url">/{{ service_key }}</div> 
+                    </a>
                 {% endfor %}
             </div>
             

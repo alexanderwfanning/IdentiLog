@@ -1,20 +1,60 @@
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for, abort
+import requests
 from app.db.db_utils import verify_user, new_user, connect, get_users, user_logging, get_log, verify_admin
 from app.config.config import Config
 app = Flask(__name__)
 key = Config()
 app.secret_key = key.flask_key
 organization_text = key.organization_text
-links = {
-        "Google": "https://google.com",
-        "GitHub": "https://github.com",
-        "Stack Overflow": "https://stackoverflow.com",
+SERVICE_MAP = {
+    "Google": "127.0.0.1",
+    "GitHub": "",
+    "Stack Overflow": "",
+}
+
+@app.route("/<string:service_name>/<path:internal_path>", methods=['GET', 'POST', 'PUT', 'DELETE'])
+@app.route("/<string:service_name>", defaults={'internal_path': ''}, methods=['GET', 'POST', 'PUT', 'DELETE'])
+def proxy_request(service_name, internal_path):
+    
+    if service_name not in SERVICE_MAP:
+        return abort(404, description=f"Service '{service_name}' not found.")
+    
+    BASE_URL = SERVICE_MAP[service_name]
+    url = f'{BASE_URL}/{internal_path}' if internal_path else BASE_URL
+    
+    method = request.method
+    data = request.get_data()
+    headers = dict(request.headers)
+    headers.pop('Host', None)
+
+    try:
+        resp = requests.request(
+            method,
+            url,
+            headers=headers,
+            data=data,
+            params=request.args,
+            allow_redirects=False,
+            timeout=30
+        )
+    
+    except requests.exceptions.RequestException as e:
+        print(f"Proxy error for {service_name}: {e}")
+        return abort(503, description=f"Internal service ({service_name}) is unavailable.")
         
-    }
+    response = app.response_class(
+        response=resp.content,
+        status=resp.status_code,
+        headers=resp.headers.items()
+    )
+    response.headers.pop('Transfer-Encoding', None) 
+    return response
+
 @app.before_request
 def load_db():
     connect()
 
+ 
 def admin_required(f):
     def decorated_function(*args, **kwargs):
         is_admin = verify_admin(session['username'])
@@ -31,7 +71,7 @@ def login_required(f):
         return f(*args, **kwargs)
     decorated_function.__name__ = f.__name__
     return decorated_function
-
+        
 @app.route("/")
 def index():
     if 'username' in session:
@@ -69,7 +109,7 @@ def login():
                 session.permanent = True
             return render_template("login.html")
         else:
-            return render_template("index.html", login_message=invalid_credential)
+            return render_template("index.html", login_message=invalid_credential, organization=organization_text)
     elif request.method == 'GET':
         if 'username' in session:
             return render_template("login.html")
@@ -82,7 +122,7 @@ def dashboard():
     if request.method == 'GET':
                 is_admin = verify_admin(session['username'])
                 user_dict=get_users()
-                return render_template("dashboard.html", username=session['username'], organization=organization_text, users=user_dict, links=links, is_admin=is_admin)
+                return render_template("dashboard.html", username=session['username'], organization=organization_text, users=user_dict, links=SERVICE_MAP, is_admin=is_admin)
             
 @app.route("/admin")
 @login_required
@@ -112,4 +152,4 @@ def logs():
     return render_template('logs.html', organization=organization_text, user=user, user_log=user_log)
     
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(port=5000, debug=True)
