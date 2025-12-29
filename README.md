@@ -18,7 +18,7 @@ The purpose of this project is to gain experience with "full-stack" development.
 ## Tech Stack
 - **Backend**: Flask (Python)
 - **Database**: SQLite with SQLCipher encryption
-- **Frontend**: [HTML/CSS/JavaScript? - add what you're using]
+- **Frontend**: HTML/CSS
 
 
 
