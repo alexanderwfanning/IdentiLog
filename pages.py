@@ -7,9 +7,9 @@ key = Config()
 app.secret_key = key.flask_key
 organization_text = key.organization_text
 SERVICE_MAP = {
-    "Google": "127.0.0.1",
-    "GitHub": "",
-    "Stack Overflow": "",
+    "Knowledge Base": "FAQ",
+    "GitBucket": "git",
+    "Kimai": "time",
 }
 
 @app.route("/<string:service_name>/<path:internal_path>", methods=['GET', 'POST', 'PUT', 'DELETE'])
